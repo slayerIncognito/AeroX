@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AeroX Executor — Roblox Support Community</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;600;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #07050f;
+    --panel: #100c1e;
+    --border: rgba(140,100,255,0.15);
+    --accent: #9b6dff;
+    --accent2: #5b8fff;
+    --accent3: #c084fc;
+    --text: #ede8ff;
+    --muted: #9988bb;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(155,109,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(91,143,255,0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 40px; height: 64px;
+    background: rgba(7,5,15,0.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .logo-img {
+    width: 36px; height: 36px; object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(155,109,255,0.7));
+  }
+  .logo-text {
+    font-family: 'Rajdhani', sans-serif; font-weight: 700;
+    font-size: 1.7rem; letter-spacing: 0.04em; line-height: 1;
+    filter: drop-shadow(0 0 8px rgba(155,109,255,0.4));
+  }
+  .logo-text .aero { color: #e8e0ff; }
+  .logo-text .ex {
+    background: linear-gradient(130deg, #c084fc, #9b6dff, #5b8fff);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .logo-sub {
+    font-family: 'Rajdhani', sans-serif; font-size: 0.52rem; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
+    display: block; line-height: 1; margin-top: 1px;
+  }
+
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav ul a {
+    color: var(--muted); text-decoration: none; font-size: 0.82rem;
+    font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--accent); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff !important; padding: 8px 20px; border-radius: 6px; font-weight: 600 !important;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative; z-index: 1; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 100px 24px 60px;
+  }
+
+  .hero-logo-wrap {
+    margin-bottom: 28px; animation: fadeUp 0.7s ease both;
+  }
+  .hero-logo-wrap img {
+    width: min(220px, 55vw); height: auto;
+    filter: drop-shadow(0 0 32px rgba(155,109,255,0.55)) drop-shadow(0 0 80px rgba(91,143,255,0.25));
+    animation: floatLogo 4s ease-in-out infinite;
+  }
+  @keyframes floatLogo {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+  }
+
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(90px); pointer-events: none;
+  }
+  .orb1 {
+    width: 650px; height: 500px;
+    background: radial-gradient(circle, rgba(155,109,255,0.22), transparent 70%);
+    top: -80px; left: 50%; transform: translateX(-50%);
+    animation: pulse1 7s ease-in-out infinite;
+  }
+  .orb2 {
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(91,143,255,0.18), transparent 70%);
+    bottom: 60px; right: -60px; animation: orbAnim 9s ease-in-out infinite;
+  }
+  .orb3 {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(192,132,252,0.14), transparent 70%);
+    top: 220px; left: -40px; animation: orbAnim 8s ease-in-out infinite 1.5s;
+  }
+  @keyframes pulse1 {
+    0%,100% { opacity:.7; transform:scale(1) translateX(-50%); }
+    50%      { opacity:1;  transform:scale(1.08) translateX(-50%); }
+  }
+  @keyframes orbAnim {
+    0%,100% { opacity:.55; transform:scale(1); }
+    50%     { opacity:1;   transform:scale(1.12); }
+  }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(155,109,255,0.12); border: 1px solid rgba(155,109,255,0.3);
+    border-radius: 100px; padding: 6px 16px; font-size: 0.72rem; font-weight: 500;
+    color: var(--accent); letter-spacing: 0.07em; text-transform: uppercase;
+    margin-bottom: 28px; animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
+
+  h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(3rem, 8vw, 6rem); font-weight: 700; line-height: 1;
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 20px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+  h1 .line1 { display: block; color: var(--text); }
+  h1 .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; background-size: 250% auto;
+    animation: shimmer 5s linear infinite, fadeUp 0.8s ease 0.1s both;
+  }
+  @keyframes shimmer { 0%{background-position:0% center} 100%{background-position:250% center} }
+
+  .hero-desc {
+    max-width: 520px; color: var(--muted); font-size: 1rem; line-height: 1.72;
+    margin-bottom: 40px; animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    justify-content: center; animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; border: none; padding: 14px 32px; border-radius: 8px;
+    font-family: 'Orbitron', sans-serif; font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.08em; cursor: pointer; text-decoration: none; display: inline-block;
+    transition: transform .2s, box-shadow .2s; box-shadow: 0 4px 22px rgba(155,109,255,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(155,109,255,0.6); }
+
+  .btn-secondary {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    padding: 14px 32px; border-radius: 8px; font-family: 'Orbitron', sans-serif;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; cursor: pointer;
+    text-decoration: none; display: inline-block; transition: border-color .2s, background .2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); background: rgba(155,109,255,0.06); }
+
+  .hero-stats {
+    display: flex; gap: 52px; margin-top: 68px; animation: fadeUp 0.8s ease 0.4s both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Rajdhani', sans-serif; font-size: 2.2rem; font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; display: block; letter-spacing: 0.05em;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+
+  /* SECTIONS */
+  section {
+    position: relative; z-index: 1; padding: 100px 40px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .section-label {
+    font-family: 'Orbitron', sans-serif; font-size: 0.63rem; font-weight: 600;
+    color: var(--accent); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Rajdhani', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 700; line-height: 1.15; letter-spacing: 0.04em;
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .section-sub { color: var(--muted); max-width: 460px; line-height: 1.7; margin-bottom: 56px; }
+
+  .divider {
+    width: calc(100% - 80px); height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(155,109,255,0.2), transparent);
+    margin: 0 40px;
+  }
+
+  /* INSTALL */
+  .install-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+
+  .install-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 20px;
+    padding: 36px; position: relative; overflow: hidden;
+    transition: border-color .3s, box-shadow .3s;
+  }
+  .install-card:hover { border-color: rgba(155,109,255,0.4); box-shadow: 0 12px 40px rgba(155,109,255,0.12); }
+  .install-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .install-card-title {
+    font-family: 'Rajdhani', sans-serif; font-size: 1.4rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .install-card-sub { color: var(--muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 28px; }
+
+  .steps { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+  .step { display: flex; align-items: flex-start; gap: 14px; }
+  .step-num {
+    flex-shrink: 0; width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif; font-size: 0.65rem; font-weight: 700; color: #fff;
+  }
+  .step-text { font-size: 0.88rem; color: var(--muted); line-height: 1.55; padding-top: 4px; }
+  .step-text strong { color: var(--text); }
+
+  .download-btn {
+    width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; border: none; padding: 15px 24px; border-radius: 10px;
+    font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: transform .2s, box-shadow .2s; box-shadow: 0 4px 22px rgba(155,109,255,0.4);
+    text-decoration: none;
+  }
+  .download-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(155,109,255,0.6); }
+
+  .version-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(155,109,255,0.1); border: 1px solid rgba(155,109,255,0.25);
+    border-radius: 6px; padding: 4px 10px; font-size: 0.72rem; color: var(--accent);
+    margin-bottom: 20px; font-family: 'Orbitron', sans-serif; letter-spacing: 0.06em;
+  }
+
+  .ios-method-label {
+    font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; color: var(--text);
+  }
+  .ios-divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 20px 0; color: var(--muted); font-size: 0.78rem;
+  }
+  .ios-divider::before, .ios-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .req-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .req-list li { display: flex; align-items: center; gap: 10px; font-size: 0.86rem; color: var(--muted); }
+  .req-list li::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+
+  /* TOOLS */
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+  .tool-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+    padding: 30px; transition: border-color .3s, transform .3s, box-shadow .3s;
+    position: relative; overflow: hidden; cursor: pointer;
+  }
+  .tool-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(155,109,255,0.06), rgba(91,143,255,0.04));
+    opacity: 0; transition: opacity .3s;
+  }
+  .tool-card:hover { border-color: rgba(155,109,255,0.4); transform: translateY(-5px); box-shadow: 0 12px 40px rgba(155,109,255,0.15); }
+  .tool-card:hover::after { opacity: 1; }
+  .tool-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 18px; }
+  .ic-purple { background: rgba(155,109,255,0.14); }
+  .ic-blue   { background: rgba(91,143,255,0.12); }
+  .ic-violet { background: rgba(192,132,252,0.12); }
+  .ic-indigo { background: rgba(100,120,255,0.12); }
+  .tool-title {
+    font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; font-weight: 700;
+    letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .tool-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.65; }
+
+  /* NEWS */
+  .news-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 18px; }
+  .news-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
+    overflow: hidden; transition: transform .3s, border-color .3s; cursor: pointer;
+  }
+  .news-card:hover { transform: translateY(-4px); border-color: rgba(155,109,255,0.35); }
+  .news-thumb { height: 130px; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; }
+  .thumb1 { background: linear-gradient(135deg, rgba(155,109,255,.22), rgba(91,143,255,.18)); }
+  .thumb2 { background: linear-gradient(135deg, rgba(91,143,255,.2), rgba(192,132,252,.18)); }
+  .thumb3 { background: linear-gradient(135deg, rgba(192,132,252,.2), rgba(155,109,255,.18)); }
+  .news-body { padding: 20px; }
+  .news-tag { font-size: 0.68rem; font-weight: 600; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .news-title { font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.35; margin-bottom: 10px; }
+  .news-excerpt { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .news-date { margin-top: 14px; font-size: 0.7rem; color: var(--muted); }
+
+  /* CTA */
+  .cta-banner {
+    background: linear-gradient(135deg, rgba(155,109,255,.1), rgba(91,143,255,.1));
+    border: 1px solid rgba(155,109,255,.25); border-radius: 24px;
+    padding: 64px 48px; text-align: center; position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 220px;
+    background: radial-gradient(circle, rgba(155,109,255,.18), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-family: 'Rajdhani', sans-serif; font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .cta-banner p { color: var(--muted); margin-bottom: 32px; max-width: 400px; margin-left: auto; margin-right: auto; }
+
+  /* FOOTER */
+  footer {
+    position: relative; z-index: 1; border-top: 1px solid var(--border);
+    padding: 36px 40px; display: flex; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color .2s; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-copy { font-size: 0.76rem; color: var(--muted); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) { .install-wrap { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) {
+    nav ul { display: none; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; justify-content: center; }
+    section { padding: 60px 20px; }
+    nav { padding: 0 20px; }
+    footer { flex-direction: column; text-align: center; }
+    .divider { width: calc(100% - 40px); margin: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <!-- REPLACE src below with your hosted logo image URL -->
+    <img class="logo-img" src="YOUR_LOGO_URL_HERE" onerror="this.style.display='none'" alt="AeroX">
+    <div>
+      <div class="logo-text"><span class="aero">aero</span><span class="ex">X</span></div>
+      <span class="logo-sub">Executor</span>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#install">Install</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#scripts">Scripts</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#join" class="nav-cta">Join Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <!-- REPLACE src below with your hosted logo image URL -->
+  <div class="hero-logo-wrap">
+    <img src="YOUR_LOGO_URL_HERE" onerror="this.closest('.hero-logo-wrap').style.display='none'" alt="AeroX">
+  </div>
+
+  <div class="badge"><span class="badge-dot"></span>Support Hub Live — 3,241 Online</div>
+
+  <h1>
+    <span class="line1">aeroX</span>
+    <span class="line2">Executor</span>
+  </h1>
+
+  <p class="hero-desc">
+    Your all-in-one Roblox community support platform. Access guides, tools, help resources, and connect with experienced players ready to assist.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#install" class="btn-primary">⬇ Download Now</a>
+    <a href="#tools" class="btn-secondary">Browse Tools</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">24K+</span><span class="stat-label">Members</span></div>
+    <div class="stat"><span class="stat-num">98%</span><span class="stat-label">Issues Resolved</span></div>
+    <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Guides & Tools</span></div>
+  </div>
+</div>
+
+<!-- INSTALL -->
+<section id="install">
+  <div class="section-label">Get Started</div>
+  <h2 class="section-title">Install AeroX Executor</h2>
+  <p class="section-sub">Get set up in minutes. Follow the steps below and join the community support hub.</p>
+
+  <div class="install-wrap">
+    <div class="install-card">
+      <div class="version-tag">● v1.0.0 — Latest Release</div>
+      <div class="install-card-title">Download & Install</div>
+      <div class="install-card-sub">Click below to download the AeroX Executor installer. Setup takes under 2 minutes.</div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Download</strong> the installer using the button below.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text"><strong>Run</strong> the installer and follow the on-screen setup.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text"><strong>Launch</strong> AeroX Executor and sign in with your community account.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Connect</strong> to Roblox and access all support tools instantly.</div>
+        </div>
+      </div>
+
+      <!-- REPLACE href with your real download link -->
+      <a href="#" onclick="alert('Download link coming soon!')" class="download-btn">⬇ &nbsp; Download AeroX Executor</a>
+    </div>
+
+    <div class="install-card">
+      <div class="version-tag">● iOS Beta — IPA v1.0.0</div>
+      <div class="install-card-title">iOS Install</div>
+      <div class="install-card-sub">Two ways to install AeroX on your iPhone or iPad. Direct install is the fastest — no PC needed.</div>
+
+      <div style="margin-bottom:20px;">
+        <div class="ios-method-label">⚡ Direct Install (Recommended)</div>
+        <p style="font-size:0.84rem;color:var(--muted);margin:6px 0 14px;line-height:1.55;">Installs over-the-air straight to your device. Tap on your iPhone/iPad.</p>
+        <!-- REPLACE the manifest URL with your real hosted .plist URL -->
+        <a href="#" onclick="alert('Direct install coming soon!')" class="download-btn" style="font-size:1rem;">
+          📲 &nbsp; Install on iPhone / iPad
+        </a>
+      </div>
+
+      <div class="ios-divider"><span>or</span></div>
+
+      <div>
+        <div class="ios-method-label">📦 Download IPA</div>
+        <p style="font-size:0.84rem;color:var(--muted);margin:6px 0 14px;line-height:1.55;">Sideload manually using <strong style="color:var(--text)">AltStore</strong>, <strong style="color:var(--text)">Sideloadly</strong>, or your preferred tool.</p>
+        <!-- REPLACE href with your real .ipa download link -->
+        <a href="#" onclick="alert('IPA download coming soon!')" class="download-btn" style="background:transparent;border:1px solid var(--border);box-shadow:none;color:var(--text);">
+          ⬇ &nbsp; Download .IPA File
+        </a>
+      </div>
+
+      <div style="margin-top:20px;padding:12px 16px;background:rgba(155,109,255,0.07);border:1px solid rgba(155,109,255,0.18);border-radius:10px;font-size:0.78rem;color:var(--muted);line-height:1.55;">
+        ⚠️ iOS 15 or later required. Trust the developer certificate in <strong style="color:var(--text)">Settings → General → VPN & Device Management</strong> after installing.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="section-label">Resources</div>
+  <h2 class="section-title">Support Tools & Resources</h2>
+  <p class="section-sub">Everything the AeroX community needs to troubleshoot, learn, and get help fast.</p>
+
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon ic-purple">🛠️</div>
+      <div class="tool-title">Issue Tracker</div>
+      <p class="tool-desc">Submit and track Roblox issues. Community volunteers triage and respond with solutions within hours.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon ic-blue">📖</div>
+      <div class="tool-title">Knowledge Base</div>
+      <p class="tool-desc">500+ community-written guides covering common errors, game-specific fixes, account help, and more.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon ic-violet">💬</div>
+      <div class="tool-title">Live Help Chat</div>
+      <p class="tool-desc">Get real-time help from experienced community members. Live support available 18 hours a day.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon ic-indigo">📊</div>
+      <div class="tool-title">Server Status Monitor</div>
+      <p class="tool-desc">Live Roblox server status dashboard. Instantly check if issues are on your end or platform-wide outages.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon ic-purple">⚡</div>
+      <div class="tool-title">Daily Challenges</div>
+      <p class="tool-desc">New community challenges every day. Earn XP, unlock cosmetics, and stay at the top of your game.</p>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon ic-blue">🔔</div>
+      <div class="tool-title">Outage Alerts</div>
+      <p class="tool-desc">Subscribe to instant alerts for Roblox outages, patches, and maintenance windows before they hit.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- NEWS -->
+<section id="news">
+  <div class="section-label">Latest</div>
+  <h2 class="section-title">Community News</h2>
+  <p class="section-sub">Updates, announcements, and highlights from the AeroX support community.</p>
+
+  <div class="news-grid">
+    <div class="news-card">
+      <div class="news-thumb thumb1">📢</div>
+      <div class="news-body">
+        <div class="news-tag">Announcement</div>
+        <div class="news-title">AeroX Executor v1.0 — Official Launch</div>
+        <p class="news-excerpt">The full release is here. Faster issue tracking, a revamped knowledge base, and all-new live status tools.</p>
+        <div class="news-date">April 3, 2026</div>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-thumb thumb2">🔧</div>
+      <div class="news-body">
+        <div class="news-tag">Guide</div>
+        <div class="news-title">Fix the Most Common Roblox Join Errors in 2026</div>
+        <p class="news-excerpt">Our top contributors compiled the definitive guide to connection errors and how to solve them fast.</p>
+        <div class="news-date">March 28, 2026</div>
+      </div>
+    </div>
+    <div class="news-card">
+      <div class="news-thumb thumb3">⭐</div>
+      <div class="news-body">
+        <div class="news-tag">Spotlight</div>
+        <div class="news-title">Helper of the Month — ZeroRex Hits 1,000 Issues Solved</div>
+        <p class="news-excerpt">We sat down with our top community helper on tips, commitment, and what drives them.</p>
+        <div class="news-date">March 21, 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SCRIPTS -->
+<section id="scripts">
+  <div class="section-label">Scripts</div>
+  <h2 class="section-title">Roblox Scripts</h2>
+  <p class="section-sub">Browse and download community-approved Roblox scripts for AeroX Executor.</p>
+
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon ic-purple">📜</div>
+      <div class="tool-title">Sample Script</div>
+      <p class="tool-desc">A basic script example.</p>
+      <pre style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; font-size: 0.8rem; color: var(--text); margin-top: 10px; overflow-x: auto;">-- Sample Roblox Script
+print("Hello from AeroX!")
+-- Add your script code here</pre>
+    </div>
+    <!-- Add more script cards here -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<section id="join">
+  <div class="cta-banner">
+    <h2>Join the Support Community</h2>
+    <p>24,000+ Roblox players helping each other every day. Get help fast — or become a helper yourself.</p>
+    <!-- REPLACE href with your signup/Discord link -->
+    <a href="#" onclick="alert('Signup coming soon!')" class="btn-primary">Create Free Account</a>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">
+    <img class="logo-img" src="YOUR_LOGO_URL_HERE" onerror="this.style.display='none'" alt="AeroX">
+    <div>
+      <div class="logo-text"><span class="aero">aero</span><span class="ex">X</span></div>
+      <span class="logo-sub">Executor</span>
+    </div>
+  </div>
+  <div class="footer-links">
+    <!-- REPLACE hrefs with your real links -->
+    <a href="#" onclick="alert('Discord coming soon!')">Discord</a>
+    <a href="#" onclick="alert('Twitter coming soon!')">Twitter</a>
+    <a href="#">About</a>
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+  </div>
+  <div class="footer-copy">© 2026 AeroX Executor — Not affiliated with Roblox Corporation</div>
+</footer>
+
+</body>
+</html></content>
+<parameter name="filePath">/workspaces/AeroX/index.html
