@@ -8,7 +8,6 @@ AeroX Executor is a Roblox community support platform. This website provides ins
 - Installation guides for Android and iOS
 - Support tools and resources
 - Community news and updates
-- Roblox scripts section with sample code
 - User registration and community access
 
 ## How to Run
